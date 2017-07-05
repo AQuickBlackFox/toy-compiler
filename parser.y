@@ -27,6 +27,7 @@
    they represent.
  */
 %token <string> TIDENTIFIER TINTEGER TDOUBLE
+%token <token> TDOUBLEPRIM
 %token <token> TCEQ TCNE TCLT TCLE TCGT TCGE TEQUAL
 %token <token> TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT
 %token <token> TPLUS TMINUS TMUL TDIV
@@ -70,6 +71,7 @@ block : TLBRACE stmts TRBRACE { $$ = $2; }
 	  ;
 
 var_decl : ident ident { $$ = new NVariableDeclaration(*$1, *$2); }
+            | TDOUBLEPRIM TMUL ident { $$ = new NVariableDeclaration(1, *(new NIdentifier("double")), *$3); }
 		 | ident ident TEQUAL expr { $$ = new NVariableDeclaration(*$1, *$2, $4); }
 		 ;
 

@@ -101,10 +101,16 @@ public:
 	const NIdentifier& type;
 	NIdentifier& id;
 	NExpression *assignmentExpr;
+        unsigned isPtr;
 	NVariableDeclaration(const NIdentifier& type, NIdentifier& id) :
-		type(type), id(id) { assignmentExpr = NULL; }
+		isPtr(0), type(type), id(id) { assignmentExpr = NULL; }
 	NVariableDeclaration(const NIdentifier& type, NIdentifier& id, NExpression *assignmentExpr) :
-		type(type), id(id), assignmentExpr(assignmentExpr) { }
+		isPtr(0), type(type), id(id), assignmentExpr(assignmentExpr) { }
+	NVariableDeclaration(unsigned isPtr, const NIdentifier& type, NIdentifier& id) :
+		isPtr(isPtr), type(type), id(id) { assignmentExpr = NULL; std::cout<<"Getting ptr var decl"<<std::endl; }
+	NVariableDeclaration(unsigned isPtr, const NIdentifier& type, NIdentifier& id, NExpression *assignmentExpr) :
+		isPtr(isPtr), type(type), id(id), assignmentExpr(assignmentExpr) { }
+	
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
 
