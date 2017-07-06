@@ -12,9 +12,12 @@
 %%
 
 [ \t\n]					        ;
-"extern"                        return TOKEN(TEXTERN);
+"extern"                return TOKEN(TEXTERN);
 "return"				        return TOKEN(TRETURN);
-"double"                                        return TOKEN(TDOUBLEPRIM);
+"double"                return TOKEN(TDOUBLEPRIM);
+"__global__"            return TOKEN(TGLOBAL);
+"__device__"            return TOKEN(TDEVICE);
+"void"                  return TOKEN(TVOID);
 [a-zA-Z_][a-zA-Z0-9_]*  SAVE_TOKEN; return TIDENTIFIER;
 [0-9]+\.[0-9]* 			    SAVE_TOKEN; return TDOUBLE;
 [0-9]+					        SAVE_TOKEN; return TINTEGER;

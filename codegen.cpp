@@ -174,11 +174,20 @@ Value* NFunctionDeclaration::codeGen(CodeGenContext& context)
 	vector<Type*> argTypes;
 	VariableList::const_iterator it;
 	for (it = arguments.begin(); it != arguments.end(); it++) {
-		argTypes.push_back(typeOf((**it).type));
+		std::cout<<(**it).isPtr<<std::endl;
+		if((**it).isPtr){
+			argTypes.push_back(llvm::PointerType::get(typeOf((**it).type), 1));
+		}else{
+			argTypes.push_back(typeOf((**it).type));
+		}
 	}
 	FunctionType *ftype = FunctionType::get(typeOf(type), makeArrayRef(argTypes), false);
 	Function *function = Function::Create(ftype, GlobalValue::InternalLinkage, id.name.c_str(), context.module);
 	BasicBlock *bblock = BasicBlock::Create(ctx, "entry", function, 0);
+
+	if(FuncType == 1){
+		function->setCallingConv(llvm::CallingConv::AMDGPU_KERNEL);
+	}
 
 	context.pushBlock(bblock);
 
