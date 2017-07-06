@@ -68,7 +68,7 @@ class NAssignment : public NExpression {
 public:
 	NIdentifier& lhs;
 	NExpression& rhs;
-	NAssignment(NIdentifier& lhs, NExpression& rhs) : 
+	NAssignment(NIdentifier& lhs, NExpression& rhs) :
 		lhs(lhs), rhs(rhs) { }
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
@@ -83,7 +83,7 @@ public:
 class NExpressionStatement : public NStatement {
 public:
 	NExpression& expression;
-	NExpressionStatement(NExpression& expression) : 
+	NExpressionStatement(NExpression& expression) :
 		expression(expression) { }
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
@@ -91,7 +91,7 @@ public:
 class NReturnStatement : public NStatement {
 public:
 	NExpression& expression;
-	NReturnStatement(NExpression& expression) : 
+	NReturnStatement(NExpression& expression) :
 		expression(expression) { }
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
@@ -101,10 +101,16 @@ public:
 	const NIdentifier& type;
 	NIdentifier& id;
 	NExpression *assignmentExpr;
+  unsigned isPtr;
 	NVariableDeclaration(const NIdentifier& type, NIdentifier& id) :
-		type(type), id(id) { assignmentExpr = NULL; }
+		isPtr(0), type(type), id(id) { assignmentExpr = NULL; }
 	NVariableDeclaration(const NIdentifier& type, NIdentifier& id, NExpression *assignmentExpr) :
-		type(type), id(id), assignmentExpr(assignmentExpr) { }
+		isPtr(0), type(type), id(id), assignmentExpr(assignmentExpr) { }
+	NVariableDeclaration(unsigned isPtr, const NIdentifier& type, NIdentifier& id) :
+		isPtr(isPtr), type(type), id(id) { assignmentExpr = NULL; std::cout<<"Getting ptr var decl"<<std::endl; }
+	NVariableDeclaration(unsigned isPtr, const NIdentifier& type, NIdentifier& id, NExpression *assignmentExpr) :
+		isPtr(isPtr), type(type), id(id), assignmentExpr(assignmentExpr) { }
+
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
 
@@ -125,8 +131,12 @@ public:
 	const NIdentifier& id;
 	VariableList arguments;
 	NBlock& block;
-	NFunctionDeclaration(const NIdentifier& type, const NIdentifier& id, 
+	unsigned FuncType;
+	NFunctionDeclaration(unsigned FuncType, const NIdentifier& type, const NIdentifier& id,
 			const VariableList& arguments, NBlock& block) :
-		type(type), id(id), arguments(arguments), block(block) { }
+		FuncType(FuncType), type(type), id(id), arguments(arguments), block(block) { }
+		NFunctionDeclaration(const NIdentifier& type, const NIdentifier& id,
+				const VariableList& arguments, NBlock& block) :
+			FuncType(0), type(type), id(id), arguments(arguments), block(block) { }
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };

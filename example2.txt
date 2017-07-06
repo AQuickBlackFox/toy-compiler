@@ -1,0 +1,7 @@
+__global__ void add(double* d, double *e){
+}
+
+
+__device__ int mul(int a, int b){}
+
+int sub(int a, int b){}
