@@ -18,6 +18,7 @@
 "__global__"            return TOKEN(TGLOBAL);
 "__device__"            return TOKEN(TDEVICE);
 "void"                  return TOKEN(TVOID);
+"threadIdx.x"           SAVE_TOKEN; return TTIDX;
 [a-zA-Z_][a-zA-Z0-9_]*  SAVE_TOKEN; return TIDENTIFIER;
 [0-9]+\.[0-9]* 			    SAVE_TOKEN; return TDOUBLE;
 [0-9]+					        SAVE_TOKEN; return TINTEGER;

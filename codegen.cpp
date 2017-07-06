@@ -64,6 +64,12 @@ Value* NDouble::codeGen(CodeGenContext& context)
 	return ConstantFP::get(Type::getDoubleTy(ctx), value);
 }
 
+Value* NTIdx::codeGen(CodeGenContext& context)
+{
+	std::cout << "Creating ThreadIdx.x: " << value << endl;
+	return ConstantInt::get(Type::getInt64Ty(ctx), value, true);
+}
+
 Value* NIdentifier::codeGen(CodeGenContext& context)
 {
 	std::cout << "Creating identifier reference: " << name << endl;

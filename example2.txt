@@ -1,7 +1,12 @@
-__global__ void add(double* d, double *e){
+__global__ void add(double* c, double *a, double *b){
+  int tx = threadIdx.x
 }
 
 
-__device__ int mul(int a, int b){}
+__device__ int mul(int a, int b){
+  return a + b
+}
 
-int sub(int a, int b){}
+int sub(int a, int b){
+  return a - b
+}
