@@ -67,6 +67,12 @@ Value* NDouble::codeGen(CodeGenContext& context)
 Value* NTIdx::codeGen(CodeGenContext& context)
 {
 	std::cout << "Creating ThreadIdx.x: " << value << endl;
+        std::vector<llvm::Type*> workItemArgs;
+        llvm::FunctionType *workItemType =
+            llvm::FunctionType::get(llvm::Type::getInt32Ty(ctx), workItemArgs, false);
+	llvm::Function *function = llvm::Intrinsic::getDeclaration(context.module, llvm::Intrinsic::amdgcn_workitem_id_x, workItemArgs);
+	std::vector<llvm::Value*> args;
+	CallInst *call = CallInst::Create(function, makeArrayRef(args), "", context.currentBlock());
 	return ConstantInt::get(Type::getInt64Ty(ctx), value, true);
 }
 
