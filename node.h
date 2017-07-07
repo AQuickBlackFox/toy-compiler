@@ -37,11 +37,18 @@ public:
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
 
-class NTIdx : public NExpression {
+class NTId : public NExpression {
 public:
 	std::string value;
-	NTIdx(std::string value) : value(value) {}
+	NTId(std::string value) : value(value) {}
 	virtual llvm::Value* codeGen(CodeGenContext& context);
+};
+
+class NBId : public NExpression {
+public:
+        std::string value;
+        NBId(std::string value) : value(value) {}
+        virtual llvm::Value* codeGen(CodeGenContext& context);
 };
 
 class NIdentifier : public NExpression {

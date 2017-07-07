@@ -64,16 +64,46 @@ Value* NDouble::codeGen(CodeGenContext& context)
 	return ConstantFP::get(Type::getDoubleTy(ctx), value);
 }
 
-Value* NTIdx::codeGen(CodeGenContext& context)
+Value* NTId::codeGen(CodeGenContext& context)
 {
 	std::cout << "Creating ThreadIdx.x: " << value << endl;
         std::vector<llvm::Type*> workItemArgs;
         llvm::FunctionType *workItemType =
             llvm::FunctionType::get(llvm::Type::getInt32Ty(ctx), workItemArgs, false);
-	llvm::Function *function = llvm::Intrinsic::getDeclaration(context.module, llvm::Intrinsic::amdgcn_workitem_id_x, workItemArgs);
+	llvm::Function *function = NULL;
+        if(value == std::string("threadIdx.x")) {
+            function  = llvm::Intrinsic::getDeclaration(context.module, llvm::Intrinsic::amdgcn_workitem_id_x, workItemArgs);
+        }
+        if(value == std::string("threadIdx.y")) {
+            function  = llvm::Intrinsic::getDeclaration(context.module, llvm::Intrinsic::amdgcn_workitem_id_y, workItemArgs);
+        }
+        if(value == std::string("threadIdx.z")) {
+            function  = llvm::Intrinsic::getDeclaration(context.module, llvm::Intrinsic::amdgcn_workitem_id_z, workItemArgs);
+        }
 	std::vector<llvm::Value*> args;
 	CallInst *call = CallInst::Create(function, makeArrayRef(args), "", context.currentBlock());
-	return ConstantInt::get(Type::getInt64Ty(ctx), value, true);
+	return call;
+}
+
+Value* NBId::codeGen(CodeGenContext& context)
+{
+	std::cout << "Creating ThreadIdx.x: " << value << endl;
+        std::vector<llvm::Type*> workItemArgs;
+        llvm::FunctionType *workItemType =
+            llvm::FunctionType::get(llvm::Type::getInt32Ty(ctx), workItemArgs, false);
+	llvm::Function *function = NULL;
+        if(value == std::string("blockIdx.x")) {
+            function = llvm::Intrinsic::getDeclaration(context.module, llvm::Intrinsic::amdgcn_workgroup_id_x, workItemArgs);
+        }
+        if(value == std::string("blockIdx.y")) {
+            function = llvm::Intrinsic::getDeclaration(context.module, llvm::Intrinsic::amdgcn_workgroup_id_y, workItemArgs);
+        }
+        if(value == std::string("blockIdx.z")) {
+            function = llvm::Intrinsic::getDeclaration(context.module, llvm::Intrinsic::amdgcn_workgroup_id_z, workItemArgs);
+        }
+	std::vector<llvm::Value*> args;
+	CallInst *call = CallInst::Create(function, makeArrayRef(args), "", context.currentBlock());
+	return call;
 }
 
 Value* NIdentifier::codeGen(CodeGenContext& context)
